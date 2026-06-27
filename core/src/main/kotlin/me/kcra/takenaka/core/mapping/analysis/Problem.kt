@@ -52,6 +52,18 @@ class Problem<T : MappingTree.ElementMapping>(
     }
 
     /**
+     * The collection of the [element]'s parent that holds [element].
+     */
+    val parentElement by lazy {
+        when (element) {
+            is MappingTree.ClassMapping -> element.tree
+            is MappingTree.FieldMapping -> element.owner
+            is MappingTree.MethodMapping -> element.owner
+            else -> throw UnsupportedOperationException("Unknown element type ${element.javaClass.name}")
+        }
+    }
+
+    /**
      * Resolves this problem with [resolution].
      */
     fun acceptResolution() = resolution()

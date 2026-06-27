@@ -79,9 +79,28 @@ abstract class AbstractMappingAnalyzer : MappingAnalyzer {
 
                     // perf: accept deletion in batch manually
                     acceptedResolutions
-                        .groupBy(keySelector = Problem<*>::parentCollection, valueTransform = Problem<*>::element)
-                        .forEach { (parentCollection, elements) ->
-                            parentCollection.removeIf(elements::contains)
+                        .groupBy(keySelector = Problem<*>::parentElement, valueTransform = Problem<*>::element)
+                        .forEach { (parentElement, elements) ->
+                            when (parentElement) {
+                                is MappingTree.ClassMapping -> {
+                                    elements.forEach { element ->
+                                        when (element) {
+                                            is MappingTree.FieldMapping -> parentElement.removeField(element.srcName, element.srcDesc)
+                                            is MappingTree.MethodMapping -> parentElement.removeMethod(element.srcName, element.srcDesc)
+                                            else -> throw UnsupportedOperationException("Unknown element type ${element.javaClass.name}")
+                                        }
+                                    }
+                                }
+                                is MappingTree -> {
+                                    elements.forEach { element ->
+                                        when (element) {
+                                            is MappingTree.ClassMapping -> parentElement.removeClass(element.srcName)
+                                            else -> throw UnsupportedOperationException("Unknown element type ${element.javaClass.name}")
+                                        }
+                                    }
+                                }
+                                else -> throw UnsupportedOperationException("Unknown element type ${parentElement.javaClass.name}")
+                            }
                         }
                 } else {
                     problems.removeIf { problem -> problem.kind == kind }

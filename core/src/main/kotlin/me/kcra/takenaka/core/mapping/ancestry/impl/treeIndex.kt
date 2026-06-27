@@ -47,6 +47,7 @@ fun <T : MappingTree, E : MappingTree.ElementMapping> AncestryTree<T, E>.collect
                     "Namespace $ns is not present in tree of version ${version.id} and tree declined header visit"
                 }
                 tree.visitNamespaces(tree.srcNamespace, tree.dstNamespaces + ns)
+                tree.reset()
             }
 
             return@mapNotNull version to nsId

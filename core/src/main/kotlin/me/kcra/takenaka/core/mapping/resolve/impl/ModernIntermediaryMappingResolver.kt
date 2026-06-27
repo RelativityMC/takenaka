@@ -124,7 +124,7 @@ class ModernIntermediaryMappingResolver(
         mappingPath?.reader()?.use { reader ->
             // Intermediary has official and intermediary namespaces
             // official is the obfuscated one
-            Tiny1FileReader.read(reader, MappingNsRenamer(visitor, mapOf("official" to MappingUtil.NS_SOURCE_FALLBACK)))
+            Tiny1FileReader.read(reader, MappingNsRenamer(visitor, mapOf("official" to MappingUtil.NS_SOURCE_FALLBACK, "intermediary" to targetNamespace)))
 
             val licensePath by licenseOutput
 

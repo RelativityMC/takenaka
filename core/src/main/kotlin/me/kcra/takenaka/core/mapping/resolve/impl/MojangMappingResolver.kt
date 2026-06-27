@@ -141,6 +141,7 @@ abstract class AbstractMojangMappingResolver(
         val isUnobfuscated = workspace.version.maybeUnobfuscated && mappingPath == null
         if (isUnobfuscated && visitor0 is MappingTree) {
             visitor0.visitNamespaces(visitor0.srcNamespace, visitor0.dstNamespaces + targetNamespace)
+            visitor0.reset()
 
             // copy everything verbatim to the "mojang" namespace
             val nsId = visitor0.getNamespaceId(targetNamespace)
