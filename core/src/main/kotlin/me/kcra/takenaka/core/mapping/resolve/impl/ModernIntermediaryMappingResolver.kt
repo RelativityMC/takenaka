@@ -29,7 +29,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import net.fabricmc.mappingio.MappingUtil
 import net.fabricmc.mappingio.MappingVisitor
 import net.fabricmc.mappingio.adapter.MappingNsRenamer
-import net.fabricmc.mappingio.format.Tiny1Reader
+import net.fabricmc.mappingio.format.tiny.Tiny1FileReader
 import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.bufferedReader
@@ -124,7 +124,7 @@ class ModernIntermediaryMappingResolver(
         mappingPath?.reader()?.use { reader ->
             // Intermediary has official and intermediary namespaces
             // official is the obfuscated one
-            Tiny1Reader.read(reader, MappingNsRenamer(visitor, mapOf("official" to MappingUtil.NS_SOURCE_FALLBACK)))
+            Tiny1FileReader.read(reader, MappingNsRenamer(visitor, mapOf("official" to MappingUtil.NS_SOURCE_FALLBACK)))
 
             val licensePath by licenseOutput
 

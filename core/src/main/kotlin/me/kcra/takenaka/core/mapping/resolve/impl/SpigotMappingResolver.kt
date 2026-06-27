@@ -38,7 +38,7 @@ import net.fabricmc.mappingio.MappedElementKind
 import net.fabricmc.mappingio.MappingUtil
 import net.fabricmc.mappingio.MappingVisitor
 import net.fabricmc.mappingio.adapter.ForwardingMappingVisitor
-import net.fabricmc.mappingio.format.TsrgReader
+import net.fabricmc.mappingio.format.srg.TsrgFileReader
 import net.fabricmc.mappingio.tree.MappingTree
 import net.fabricmc.mappingio.tree.MappingTreeView
 import org.objectweb.asm.commons.Remapper
@@ -204,10 +204,10 @@ abstract class AbstractSpigotMappingResolver @Deprecated(
         mappingPath?.bufferedReader()?.use { reader ->
             // skip license comment, mapping-io doesn't remove comments (it will parse them)
             if (reader.readLine().startsWith('#')) {
-                TsrgReader.read(reader, MappingUtil.NS_SOURCE_FALLBACK, targetNamespace, visitor)
+                TsrgFileReader.read(reader, MappingUtil.NS_SOURCE_FALLBACK, targetNamespace, visitor)
             } else {
                 // we can't seek to the beginning, so we have to make a new reader altogether
-                mappingPath?.bufferedReader()?.use { TsrgReader.read(it, MappingUtil.NS_SOURCE_FALLBACK, targetNamespace, visitor) }
+                mappingPath?.bufferedReader()?.use { TsrgFileReader.read(it, MappingUtil.NS_SOURCE_FALLBACK, targetNamespace, visitor) }
             }
         }
         
@@ -274,7 +274,7 @@ abstract class AbstractSpigotMappingResolver @Deprecated(
  * Returns the CraftBukkit NMS version string from the [AbstractSpigotMappingResolver.META_CB_NMS_VERSION] metadata.
  */
 inline val MappingTreeView.craftBukkitNmsVersion: String?
-    get() = getMetadata(AbstractSpigotMappingResolver.META_CB_NMS_VERSION)
+    get() = getMetadata(AbstractSpigotMappingResolver.META_CB_NMS_VERSION).firstNotNullOfOrNull { it.value }
 
 /**
  * A resolver for Spigot class mapping files.

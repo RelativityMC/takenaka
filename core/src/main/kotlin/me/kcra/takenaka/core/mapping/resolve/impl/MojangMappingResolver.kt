@@ -30,7 +30,7 @@ import me.kcra.takenaka.core.mapping.util.unwrap
 import net.fabricmc.mappingio.MappingUtil
 import net.fabricmc.mappingio.MappingVisitor
 import net.fabricmc.mappingio.adapter.MappingSourceNsSwitch
-import net.fabricmc.mappingio.format.ProGuardReader
+import net.fabricmc.mappingio.format.proguard.ProGuardFileReader
 import net.fabricmc.mappingio.tree.MappingTree
 import java.net.URL
 import java.nio.file.Path
@@ -159,7 +159,7 @@ abstract class AbstractMojangMappingResolver(
         } else {
             // Mojang maps are original -> obfuscated, so we need to switch it beforehand
             mappingPath?.reader()?.use {
-                ProGuardReader.read(it, targetNamespace, MappingUtil.NS_SOURCE_FALLBACK, MappingSourceNsSwitch(visitor, MappingUtil.NS_SOURCE_FALLBACK))
+                ProGuardFileReader.read(it, targetNamespace, MappingUtil.NS_SOURCE_FALLBACK, MappingSourceNsSwitch(visitor, MappingUtil.NS_SOURCE_FALLBACK))
             }
         }
 

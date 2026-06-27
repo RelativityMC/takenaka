@@ -46,7 +46,7 @@ class UtilTest {
 
     @Test
     fun `HTTP response body content length should return -1 when the header is not defined`() {
-        val url = URL("https://www.google.com")
+        val url = URL("https://bing.com")
         assertEquals(-1, url.contentLength)
     }
 
@@ -58,7 +58,7 @@ class UtilTest {
 
     @Test
     fun `ok property should return true for 2xx status codes`() {
-        val url = URL("https://www.google.com")
+        val url = URL("https://www.gstatic.com/generate_204")
         url.httpRequest {
             assertTrue(it.ok)
         }
@@ -66,7 +66,7 @@ class UtilTest {
 
     @Test
     fun `ok property should return false for non-2xx status codes`() {
-        val url = URL("https://www.google.com/a")
+        val url = URL("https://www.gstatic.com/aaa")
         url.httpRequest {
             assertFalse(it.ok)
         }
@@ -74,7 +74,7 @@ class UtilTest {
 
     @Test
     fun `HTTP response body stream can be copied to file`() {
-        val url = URL("https://google.com")
+        val url = URL("https://bing.com")
         val tempFile = createTempFile()
         url.copyTo(tempFile)
         assertTrue(tempFile.isRegularFile())
@@ -82,7 +82,7 @@ class UtilTest {
 
     @Test
     fun `HTTP response body can be read as text`() {
-        val url = URL("https://google.com")
+        val url = URL("https://bing.com")
         url.httpRequest {
             assertNotEquals("", it.readText())
         }

@@ -33,8 +33,8 @@ import me.kcra.takenaka.core.versionManifestOf
 import me.kcra.takenaka.generator.common.provider.MappingProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
 import me.kcra.takenaka.generator.common.provider.ResolveException
-import net.fabricmc.mappingio.format.Tiny2Reader
-import net.fabricmc.mappingio.format.Tiny2Writer
+import net.fabricmc.mappingio.format.tiny.Tiny2FileReader
+import net.fabricmc.mappingio.format.tiny.Tiny2FileWriter
 import net.fabricmc.mappingio.tree.MemoryMappingTree
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -113,7 +113,7 @@ class ResolvingMappingProvider @Deprecated(
                     try {
                         return@parallelMap workspace.version to MemoryMappingTree().also { tree ->
                             withContext(Dispatchers.IO + CoroutineName("io-coro")) {
-                                outputFile.reader().use { r -> Tiny2Reader.read(r, tree) }
+                                outputFile.reader().use { r -> Tiny2FileReader.read(r, tree) }
                                 logger.info { "read ${workspace.version.id} joined mapping file from ${outputFile.pathString}" }
                             }
 
@@ -164,7 +164,7 @@ class ResolvingMappingProvider @Deprecated(
 
                 if (outputFile != null && !outputFile.isDirectory()) {
                     withContext(Dispatchers.IO + CoroutineName("io-coro")) {
-                        Tiny2Writer(outputFile.writer(), false).use { w -> tree.accept(MissingDescriptorFilter(w)) }
+                        Tiny2FileWriter(outputFile.writer(), false).use { w -> tree.accept(MissingDescriptorFilter(w)) }
                         logger.info { "wrote ${workspace.version.id} joined mapping file to ${outputFile.pathString}" }
                     }
                 }
