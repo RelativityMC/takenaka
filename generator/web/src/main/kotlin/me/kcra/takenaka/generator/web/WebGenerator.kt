@@ -187,8 +187,8 @@ open class WebGenerator(override val workspace: Workspace, val config: WebConfig
                             .mapNotNull { (ns, nsDesc) ->
                                 if (nsDesc.license == null) return@mapNotNull null
 
-                                val content = nsDesc.license.content.let(tree::getMetadata) ?: return@mapNotNull null
-                                val source = nsDesc.license.source.let(tree::getMetadata) ?: return@mapNotNull null
+                                val content = nsDesc.license.content.let { tree.getMetadata(it).firstNotNullOfOrNull { it1 -> it1.value } } ?: return@mapNotNull null
+                                val source = nsDesc.license.source.let { tree.getMetadata(it).firstNotNullOfOrNull { it1 -> it1.value } } ?: return@mapNotNull null
 
                                 return@mapNotNull ns to License(content, source)
                             }

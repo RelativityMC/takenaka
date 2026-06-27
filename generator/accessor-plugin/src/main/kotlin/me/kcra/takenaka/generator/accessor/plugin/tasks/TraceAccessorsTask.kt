@@ -24,6 +24,7 @@ import me.kcra.takenaka.generator.common.provider.impl.SimpleAncestryProvider
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.OutputStream
 import java.io.PrintStream
 
@@ -32,6 +33,7 @@ import java.io.PrintStream
  *
  * @author Matouš Kučera
  */
+@DisableCachingByDefault
 abstract class TraceAccessorsTask : GenerationTask() {
     /**
      * The generation trace output file, defaults to `build/takenaka/accessor-trace.txt`, nothing is saved if null.

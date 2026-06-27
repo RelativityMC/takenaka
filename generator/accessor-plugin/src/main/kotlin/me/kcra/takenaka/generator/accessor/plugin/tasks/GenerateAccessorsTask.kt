@@ -22,12 +22,14 @@ import me.kcra.takenaka.generator.accessor.AccessorConfiguration
 import me.kcra.takenaka.generator.accessor.AccessorGenerator
 import me.kcra.takenaka.generator.common.provider.impl.SimpleAncestryProvider
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * A Gradle task that generates accessors from mappings.
  *
  * @author Matouš Kučera
  */
+@DisableCachingByDefault
 abstract class GenerateAccessorsTask : GenerationTask() {
     /**
      * Runs the task.

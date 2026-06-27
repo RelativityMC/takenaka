@@ -42,6 +42,7 @@ import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.*
+import org.gradle.work.DisableCachingByDefault
 import java.util.zip.ZipFile
 
 /**
@@ -59,6 +60,7 @@ typealias MutableMappingsMapProperty = MapProperty<Version, MappingTree>
  *
  * @author Matouš Kučera
  */
+@DisableCachingByDefault
 abstract class ResolveMappingsTask : DefaultTask() {
     /**
      * The cache directory, defaults to `build/takenaka/cache`.
@@ -73,6 +75,7 @@ abstract class ResolveMappingsTask : DefaultTask() {
      */
     @get:Optional
     @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val mappingBundle: RegularFileProperty
 
     /**

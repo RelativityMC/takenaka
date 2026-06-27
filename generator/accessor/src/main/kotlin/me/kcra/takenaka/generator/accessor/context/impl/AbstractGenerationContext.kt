@@ -37,6 +37,8 @@ import me.kcra.takenaka.generator.accessor.util.globAsRegex
 import me.kcra.takenaka.generator.accessor.util.isGlob
 import me.kcra.takenaka.generator.common.provider.AncestryProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
+import me.kcra.takenaka.core.mapping.ancestry.AncestryTree
+import net.fabricmc.mappingio.tree.MappingTreeView
 import net.fabricmc.mappingio.tree.MappingTreeView.*
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
@@ -137,7 +139,7 @@ abstract class AbstractGenerationContext(
                 resolveRequiredFields(fieldTree, model.requiredTypes).map { fieldNode ->
                     val accessor = FieldAccessor(getFriendlyName(fieldNode.last.value), getFriendlyDesc(fieldNode.last.value))
 
-                    ResolvedFieldAccessor(accessor, fieldNode, fieldOverloads.generate(accessor.upperName))
+                    ResolvedMemberAccessor(accessor, fieldNode, fieldOverloads.generate(accessor.upperName))
                 }
             )
 
@@ -147,7 +149,7 @@ abstract class AbstractGenerationContext(
         }
 
         resolveRequiredConstructors(ctorTree, model.requiredTypes).mapTo(ctorAccessors) { ctorNode ->
-            ResolvedConstructorAccessor(ConstructorAccessor(getFriendlyDesc(ctorNode.last.value)), ctorNode, ctorAccessors.size)
+            ResolvedMemberAccessor(ConstructorAccessor(getFriendlyDesc(ctorNode.last.value)), ctorNode, ctorAccessors.size)
         }
 
         val methodTree = ancestryProvider.method<_, _, MethodMappingView>(node)
@@ -159,7 +161,7 @@ abstract class AbstractGenerationContext(
                 resolveRequiredMethods(methodTree, model.requiredTypes).map { methodNode ->
                     val accessor = MethodAccessor(getFriendlyName(methodNode.last.value), getFriendlyDesc(methodNode.last.value))
 
-                    ResolvedMethodAccessor(accessor, methodNode, methodOverloads.generate(accessor.upperName))
+                    ResolvedMemberAccessor(accessor, methodNode, methodOverloads.generate(accessor.upperName))
                 }
             )
 
@@ -225,11 +227,11 @@ abstract class AbstractGenerationContext(
      * @return the resolved model
      */
     protected open fun resolveFieldChain(tree: FieldAncestryTree, model: FieldAccessor, overloadIndex: Int): ResolvedFieldAccessor {
-        return ResolvedFieldAccessor(
+        return ResolvedMemberAccessor(
             buildOrderedMap {
                 var nextNode: FieldAccessor? = model
                 while (nextNode != null) {
-                    add(nextNode to resolveField(tree, nextNode))
+                    add((nextNode to resolveField(tree, nextNode)) as Pair<FieldAccessor, AncestryTree.Node<MappingTreeView, FieldMappingView>>)
                     nextNode = nextNode.chain
                 }
 
@@ -321,11 +323,11 @@ abstract class AbstractGenerationContext(
      * @return the resolved model
      */
     protected open fun resolveMethodChain(tree: MethodAncestryTree, model: MethodAccessor, overloadIndex: Int): ResolvedMethodAccessor {
-        return ResolvedMethodAccessor(
+        return ResolvedMemberAccessor(
             buildOrderedMap {
                 var nextNode: MethodAccessor? = model
                 while (nextNode != null) {
-                    add(nextNode to resolveMethod(tree, nextNode))
+                    add((nextNode to resolveMethod(tree, nextNode)) as Pair<MethodAccessor, AncestryTree.Node<MappingTreeView, MethodMappingView>>)
                     nextNode = nextNode.chain
                 }
 

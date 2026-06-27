@@ -35,6 +35,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * The default history index namespace.
@@ -46,6 +47,7 @@ const val DEFAULT_INDEX_NS = "takenaka_node"
  *
  * @author Matouš Kučera
  */
+@DisableCachingByDefault
 abstract class GenerationTask : DefaultTask() {
     /**
      * The output directory, defaults to `build/takenaka/output`.
