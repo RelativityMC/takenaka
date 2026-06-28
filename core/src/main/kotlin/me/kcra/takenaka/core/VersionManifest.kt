@@ -38,6 +38,11 @@ import kotlin.io.path.isRegularFile
 const val VERSION_MANIFEST_V2 = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
 
 /**
+ * The URL to the Fabric's additional version manifest.
+ */
+const val FABRIC_VERSION_MANIFEST_V2 = "https://maven.fabricmc.net/net/minecraft/experimental_versions.json"
+
+/**
  * Fetches and deserializes the version manifest from Mojang's API.
  *
  * @return the version manifest
@@ -55,6 +60,14 @@ fun ObjectMapper.versionManifest(): VersionManifest = readValue(URL(VERSION_MANI
  * @return the version manifest
  */
 fun versionManifestOf(url: String = VERSION_MANIFEST_V2): VersionManifest = MAPPER.readValue(URL(url))
+
+/**
+ * Fetches and deserializes the version manifest from Mojang's API.
+ *
+ * @param url the version manifest url, defaults to [VERSION_MANIFEST_V2]
+ * @return the version manifest
+ */
+fun fabricVersionManifestOf(url: String = FABRIC_VERSION_MANIFEST_V2): FabricVersionManifest = MAPPER.readValue(URL(url))
 
 /**
  * Retrieves the version manifest from Mojang's API or a cache file,
@@ -165,6 +178,28 @@ data class VersionManifest(
 }
 
 /**
+ * Fabric's additional version manifest.
+ *
+ * @property versions all versions, sorting is maintained when deserialized (descending in case of [VERSION_MANIFEST_V2])
+ */
+data class FabricVersionManifest(
+    val versions: List<Version>
+) : Serializable {
+
+    /**
+     * Finds a version by its ID (e.g. 1.14.4).
+     *
+     * @param id the version ID
+     * @return the version, null if not found
+     */
+    operator fun get(id: String): Version? = versions.find { it.id == id }
+
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
+
+/**
  * A version from Mojang's version manifest.
  */
 data class Version(
@@ -199,7 +234,7 @@ data class Version(
     val complianceLevel: Int
 ) : Comparable<Version>, Serializable {
     enum class Type {
-        RELEASE, SNAPSHOT, OLD_BETA, OLD_ALPHA, UNOBFUSCATED
+        RELEASE, SNAPSHOT, OLD_BETA, OLD_ALPHA, UNOBFUSCATED, PENDING, REMOVED
     }
 
     /**
