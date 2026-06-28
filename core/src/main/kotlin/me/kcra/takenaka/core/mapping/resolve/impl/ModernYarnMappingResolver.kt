@@ -58,7 +58,7 @@ class ModernYarnMappingResolver(
     val yarnProvider: ModernYarnMetadataProvider,
     val relaxedCache: Boolean = true
 ) : AbstractMappingResolver(), MappingContributor, LicenseResolver {
-    override val licenseSource: String = "https://raw.githubusercontent.com/RelativityMC/yarn/${version.id}/LICENSE"
+    override val licenseSource: String = "https://raw.githubusercontent.com/RelativityMC/yarn/refs/heads/ver/${version.id}/LICENSE"
     override val targetNamespace: String = "modern-yarn"
     override val outputs: List<Output<out Path?>>
         get() = listOf(mappingOutput, licenseOutput)
@@ -213,6 +213,7 @@ class ModernYarnMappingResolver(
             // official is the obfuscated one
             MappingReader.read(reader, MappingNsRenamer(visitor, mapOf(
                 "official" to MappingUtil.NS_SOURCE_FALLBACK,
+                "intermediary" to "modern-intermediary",
                 "named" to targetNamespace
             )))
 
@@ -253,26 +254,26 @@ class ModernYarnMappingResolver(
         /**
          * The file name of the cached mapping JAR.
          */
-        const val MAPPING_JAR = "yarn_mappings.jar"
+        const val MAPPING_JAR = "modern_yarn_mappings.jar"
 
         /**
          * The file name of the cached mappings.
          */
-        const val MAPPINGS = "yarn_mappings.tiny"
+        const val MAPPINGS = "modern_yarn_mappings.tiny"
 
         /**
          * The file name of the cached license file.
          */
-        const val LICENSE = "yarn_license.txt"
+        const val LICENSE = "modern_yarn_license.txt"
 
         /**
          * The license metadata key.
          */
-        const val META_LICENSE = "yarn_license"
+        const val META_LICENSE = "modern_yarn_license"
 
         /**
          * The license source metadata key.
          */
-        const val META_LICENSE_SOURCE = "yarn_license_source"
+        const val META_LICENSE_SOURCE = "modern_yarn_license_source"
     }
 }

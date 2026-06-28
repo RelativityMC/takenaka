@@ -142,21 +142,21 @@ class ModernIntermediaryMappingResolver(
         /**
          * The file name of the cached mappings.
          */
-        const val MAPPINGS = "intermediary_mappings.tiny"
+        const val MAPPINGS = "modern_intermediary_mappings.tiny"
 
         /**
          * The file name of the cached license file.
          */
-        const val LICENSE = "intermediary_license.txt"
+        const val LICENSE = "modern_intermediary_license.txt"
 
         /**
          * The license metadata key.
          */
-        const val META_LICENSE = "intermediary_license"
+        const val META_LICENSE = "modern_intermediary_license"
 
         /**
          * The license source metadata key.
          */
-        const val META_LICENSE_SOURCE = "intermediary_license_source"
+        const val META_LICENSE_SOURCE = "modern_intermediary_license_source"
     }
 }
